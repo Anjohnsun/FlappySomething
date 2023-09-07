@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class FlappyThingMovement : MonoBehaviour
     [SerializeField] private float _speedBoostPerSecond;
     private float _verticalSpeed;
 
-    private bool _canMove = false;
+    private static bool _canMove = false;
     private bool _isRising = false;
 
     private PlayerInput _playerInput;
@@ -26,13 +27,13 @@ public class FlappyThingMovement : MonoBehaviour
             _verticalSpeed += _isRising ? _riseFallSpeed * Time.deltaTime : -_riseFallSpeed * Time.deltaTime;
             transform.position = new Vector2(transform.position.x + _movementSpeed * Time.deltaTime, transform.position.y + _verticalSpeed * Time.deltaTime);
         }
-    }
+    }  //одна больша€ ересь, объ€сните пожалуйста!!!!
 
     private void MakeFlappyThingRise(bool value) {
         _isRising = value;
     }
 
-    public void LockMovement(bool value) {
+    public void UnlockMovement(bool value) {
         _canMove = value;
     }
 

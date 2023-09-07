@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameStartListener : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    [SerializeField] private GameObject _startText;
+    [Inject]
     GameStateSwitcher _gameStateSwitcher;
 
     private void OnEnable() {
@@ -15,17 +16,11 @@ public class GameStartListener : MonoBehaviour
     }
 
     private void StartGame() {
-       // _gameStateSwitcher.SwitchGameState(new GameplayState());
-       _startText.SetActive(false);
+        _gameStateSwitcher.SwitchGameState(new GameplayState(new FlappyThingMovement())); //да, это мерзко
         gameObject.SetActive(false);
     }
 
     private void OnDisable() {
         _playerInput.Disable();
-    }
-
-    public void OpenStartScreen() {
-        _startText.SetActive(true);
-        gameObject.SetActive(true);
     }
 }

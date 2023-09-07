@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PointCounter : MonoBehaviour
+public class PointCounter
 {
-    [SerializeField] private TextMeshProUGUI _pointField;
-    private int _points;
+    private TextMeshProUGUI _pointField;
+    private int _points = 0;
+
+    public PointCounter(TextMeshProUGUI pointField) {
+        _pointField = pointField;
+    }
     
     public void ResetPoints() {
         _points = 0;

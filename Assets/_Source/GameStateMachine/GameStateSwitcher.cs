@@ -2,26 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateSwitcher : MonoBehaviour
+public class GameStateSwitcher
 {
     private IGameState _currentGameState;
-    private GameplayState _gameplayState;
-    private StartScreenState _startCreenState;
+    private IGameState[] _states;
 
-    private void Start() {
-        
+    public GameStateSwitcher(params IGameState[] states) {
+        _states = states;
+        _currentGameState = _states[0];
     }
 
-    public void SwitchGameState(IGameState newGameState) {
+    public void SwitchGameState(IGameState newGameState/*шакально, надо подумать*/) {
 
-        if(_currentGameState.GetType() != newGameState.GetType()) {
-            
-            _currentGameState.Exit();
-            _currentGameState = newGameState;
-            _currentGameState.Enter();
-
+        if (_currentGameState.GetType() != newGameState.GetType()) {
+            for (int i = 0; i < _states.Length; i++) {
+                if (newGameState.GetType() == _states[i].GetType()) {
+                    _currentGameState.Exit();
+                    _currentGameState = newGameState;
+                    _currentGameState.Enter();
+                }
+            }
         }
 
     }
-    
+
 }
