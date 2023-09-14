@@ -9,18 +9,24 @@ public class GameStartListener : MonoBehaviour
     [Inject]
     GameStateSwitcher _gameStateSwitcher;
 
-    private void OnEnable() {
+    private void Awake()
+    {
         _playerInput = new PlayerInput();
-        _playerInput.Enable();
         _playerInput.Player.Click.canceled += context => StartGame();
     }
 
-    private void StartGame() {
-        _gameStateSwitcher.SwitchGameState(new GameplayState(new FlappyThingMovement())); //да, это мерзко
-        gameObject.SetActive(false);
+    private void OnEnable()
+    {
+        _playerInput.Enable();
     }
 
-    private void OnDisable() {
+    private void StartGame()
+    {
+        _gameStateSwitcher.SwitchGameState(typeof(GameplayState));
+    }
+
+    private void OnDisable()
+    {
         _playerInput.Disable();
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class FlappyThingMovement : MonoBehaviour
 {
-    [SerializeField] private float _movementSpeed;
+    [SerializeField] private Vector2 _startPosition;
+
     [SerializeField] private float _riseFallSpeed;
-    [SerializeField] private float _speedBoostPerSecond;
     private float _verticalSpeed;
 
     private static bool _canMove = false;
@@ -15,29 +15,42 @@ public class FlappyThingMovement : MonoBehaviour
 
     private PlayerInput _playerInput;
 
-    private void Awake() {
+    private void Awake()
+    {
         _playerInput = new PlayerInput();
         _playerInput.Enable();
         _playerInput.Player.Click.performed += context => MakeFlappyThingRise(true);
         _playerInput.Player.Click.canceled += context => MakeFlappyThingRise(false);
+        ReturnToStartPosition();
     }
 
-    private void Update() {
-        if (_canMove) {
+    private void Update()
+    {
+        if (_canMove)
+        {
             _verticalSpeed += _isRising ? _riseFallSpeed * Time.deltaTime : -_riseFallSpeed * Time.deltaTime;
-            transform.position = new Vector2(transform.position.x + _movementSpeed * Time.deltaTime, transform.position.y + _verticalSpeed * Time.deltaTime);
+            transform.position = new Vector2(transform.position.x, transform.position.y + _verticalSpeed * Time.deltaTime);
         }
-    }  //одна больша€ ересь, объ€сните пожалуйста!!!!
+    }
 
-    private void MakeFlappyThingRise(bool value) {
+    private void MakeFlappyThingRise(bool value)
+    {
         _isRising = value;
     }
 
-    public void UnlockMovement(bool value) {
+    public void UnlockMovement(bool value)
+    {
         _canMove = value;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         _playerInput.Disable();
+    }
+
+    public void ReturnToStartPosition()
+    {
+        transform.position = _startPosition;
+        _verticalSpeed = 0;
     }
 }

@@ -6,42 +6,38 @@ using Zenject;
 public class InteractablesSpawner
 {
     private GameObject _objectToSpawn;
-    /*    private Vector2 _startOffset;
-        private Vector2[] _moveToPoints;
-        private bool _moveRandomly;*/
 
     private MonoBehaviour _randomCoroutineObject;
+
+    private Vector2 _spawnPoint;
+    private float _verticalSpawnSpread;
 
     private float _delay;
     private float _delayRandomizer;
 
-    [Inject]
-    private FlappyThingMovement _flappyMovement;
-
-    public InteractablesSpawner(GameObject objectToSpawn,/* Vector2[] moveToPoints, bool moveRandomly,*/ MonoBehaviour randomCoroutineObject) {
+    public InteractablesSpawner(GameObject objectToSpawn, MonoBehaviour randomCoroutineObject, Vector2 spawnPoint, float verticaSpawnSpread)
+    {
         _objectToSpawn = objectToSpawn;
-        /*        _startOffset = startOffset;
-                _moveToPoints = moveToPoints;
-                _moveRandomly = moveRandomly;*/
         _randomCoroutineObject = randomCoroutineObject;
+        _spawnPoint = spawnPoint;
+        _verticalSpawnSpread = verticaSpawnSpread;
     }
 
-    public void StartSpawning(bool conf) {
+    public void StartSpawning(bool conf)
+    {
         if (conf)
-            _randomCoroutineObject.StartCoroutine("SpawnInteractableCor");
+            _randomCoroutineObject.StartCoroutine(SpawnInteractableCor());
         else
             _randomCoroutineObject.StopAllCoroutines();
     }
 
-    private IEnumerator SpawnInteractableCor() {
+    private IEnumerator SpawnInteractableCor()
+    {
         yield return new WaitForSeconds(_delay + Random.Range(0, 1) * _delayRandomizer);
 
-        GameObject.Instantiate(_objectToSpawn, new Vector2(_flappyMovement.transform.position.x + 10, Random.Range(-3, 3)), new Quaternion());
-        //тут я понял, что не разобрался с динамическим внедрением
+        GameObject.Instantiate(_objectToSpawn, new Vector2(_spawnPoint.x, _spawnPoint.y + _verticalSpawnSpread * Random.Range(-1, 1)), new Quaternion());
 
-        yield return _randomCoroutineObject.StartCoroutine("SpawnInteractableCor");
+        yield return _randomCoroutineObject.StartCoroutine(SpawnInteractableCor());
     }
-
-
 
 }

@@ -15,9 +15,12 @@ public class Obstacle : MonoBehaviour
     [Inject]
     private GameStateSwitcher _gameStateSwitcher;
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.layer == _playerLayer) {
-            _gameStateSwitcher.SwitchGameState(new StartScreenState(new GameObject(), new PointCounter(new TextMeshProUGUI()))); //да да шакально согласен
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == _playerLayer)
+        {
+            _gameStateSwitcher.SwitchGameState(typeof(StartScreenState));
         }
     }
 }

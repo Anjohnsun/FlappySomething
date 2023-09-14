@@ -6,20 +6,21 @@ using Zenject;
 public class GameplayState : IGameState
 {
     private FlappyThingMovement _flappyMovement;
-    [Inject]
-    private InteractablesSpawner _spawner;
 
-    public GameplayState(FlappyThingMovement flappyThingMovement) {
+
+    public GameplayState(FlappyThingMovement flappyThingMovement)
+    {
         _flappyMovement = flappyThingMovement;
     }
 
-    public void Enter() {
+    public void Enter()
+    {
         _flappyMovement.UnlockMovement(true);
-        _spawner.StartSpawning(true);
+        _flappyMovement.ReturnToStartPosition();
     }
 
-    public void Exit() {
+    public void Exit()
+    {
         _flappyMovement.UnlockMovement(false);
-        _spawner.StartSpawning(false);
     }
 }
