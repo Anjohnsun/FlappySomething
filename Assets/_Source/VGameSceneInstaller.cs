@@ -1,8 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Zenject;
+using VContainer;
+using VContainer.Unity;
 
-public class GameSceneInstaller : MonoInstaller
+public class VGameSceneInstaller : LifetimeScope
 {
     [SerializeField] private FlappyThingMovement _flappyMovement;
     [SerializeField] private GameObject _startText;
@@ -15,8 +18,10 @@ public class GameSceneInstaller : MonoInstaller
     [SerializeField] private Vector2 _obstacleSpawnPoint;
     [SerializeField] private float _verticalSpawnSpread;
 
-    public override void InstallBindings()
+    protected override void Configure(IContainerBuilder builder)
     {
+        base.Configure(builder);
+
         PointCounter pointCounter = new PointCounter(_pointField);
 
         GameplayState gameplayState = new GameplayState(_flappyMovement);
@@ -25,13 +30,22 @@ public class GameSceneInstaller : MonoInstaller
         GameStateSwitcher gameStateSwitcher = new GameStateSwitcher(startScreenState, gameplayState);
 
         InteractablesSpawner _obstacleSpawner = new InteractablesSpawner(_obstaclePrefab, this, _obstacleSpawnPoint, _verticalSpawnSpread);
-        //_spawners = new InteractablesSpawner[] { _obstacleSpawner };
 
-        Container.Bind<GameStateSwitcher>().FromInstance(gameStateSwitcher).AsSingle();
+        /*Container.Bind<GameStateSwitcher>().FromInstance(gameStateSwitcher).AsSingle();
         Container.Bind<PointCounter>().FromInstance(pointCounter).AsSingle();
         Container.Bind<FlappyThingMovement>().FromInstance(_flappyMovement).AsSingle();
         Container.Bind<InteractablesSpawner>().FromInstance(_obstacleSpawner).AsSingle();
         Container.Bind<GameStartListener>().FromInstance(_gameStartListener).AsSingle();
-        Container.Bind<GlobalInteractableMover>().FromInstance(_globalInteractableMover).AsSingle();
+        Container.Bind<GlobalInteractableMover>().FromInstance(_globalInteractableMover).AsSingle();*/
+
+        builder.RegisterEntryPoint<VBootstrapper>();
+
+        builder.RegisterInstance(gameStateSwitcher);
+        builder.RegisterInstance(pointCounter);
+        builder.RegisterInstance(_flappyMovement);
+        builder.RegisterInstance(_obstacleSpawner);
+        builder.RegisterInstance(_gameStartListener);
+        builder.RegisterInstance(_globalInteractableMover);
+        Debug.Log("Done");
     }
 }
